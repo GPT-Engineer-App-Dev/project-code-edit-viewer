@@ -21,13 +21,18 @@ const Index = () => {
         }, {});
       });
       setCsvData(data);
+      console.log("Parsed CSV data:", data);
+      const uniqueProjects = getUniqueProjects();
+      console.log("Unique projects:", uniqueProjects);
     };
 
     reader.readAsText(file);
   };
 
   const handleProjectChange = (event) => {
+    console.log("Selected project before change:", selectedProject);
     setSelectedProject(event.target.value);
+    console.log("Selected project after change:", event.target.value);
   };
 
   const getUniqueProjects = () => {
@@ -72,6 +77,7 @@ const Index = () => {
       {csvData.length > 0 && (
         <Box mb={4}>
           <Select placeholder="Select a project" value={selectedProject} onChange={handleProjectChange}>
+            {console.log("Select options:", getUniqueProjects())}
             {getUniqueProjects().map((project) => (
               <option key={project} value={project}>
                 {project}
