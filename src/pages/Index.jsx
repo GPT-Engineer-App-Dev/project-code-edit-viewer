@@ -50,7 +50,7 @@ const Index = () => {
           tags = JSON.parse(tags);
           return {
             ...edit,
-            code_blocks: tags.output || edit.code_blocks,
+            output: tags.output,
           };
         } catch (err) {
           console.error(`Failed to parse tags for row with ID ${edit.id}:`, err);
@@ -87,40 +87,30 @@ const Index = () => {
             Edits for Project: {selectedProject}
           </Heading>
 
-          <Accordion allowMultiple>
+          <Box>
             {getProjectEdits().map((edit) => (
-              <AccordionItem key={edit.id}>
-                <h2>
-                  <AccordionButton>
-                    <Box flex="1" textAlign="left">
-                      Edit ID: {edit.id}
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel pb={4}>
-                  {edit.code_blocks && (
-                    <Box mb={4}>
-                      <Heading as="h3" size="md" mb={2}>
-                        Code Blocks
-                      </Heading>
-                      <Code p={2} whiteSpace="pre">
-                        {edit.code_blocks}
-                      </Code>
-                    </Box>
-                  )}
-                  {edit.status !== "failed" && (
-                    <Text mb={2}>
-                      <strong>Commit SHA:</strong> {edit.commit_sha}
-                    </Text>
-                  )}
+              <Box key={edit.id} borderWidth={1} borderRadius="lg" p={4} mb={4}>
+                <Heading as="h3" size="md" mb={2}>
+                  Edit ID: {edit.id}
+                </Heading>
+                {edit.output ? (
+                  <Box bg="gray.100" p={4} mb={4}>
+                    <Code whiteSpace="pre-wrap">{edit.output}</Code>
+                  </Box>
+                ) : (
+                  <Text mb={4}>No output available</Text>
+                )}
+                {edit.status !== "failed" && (
                   <Text mb={2}>
-                    <strong>Created At:</strong> {edit.created_at}
+                    <strong>Commit SHA:</strong> {edit.commit_sha}
                   </Text>
-                </AccordionPanel>
-              </AccordionItem>
+                )}
+                <Text mb={2}>
+                  <strong>Created At:</strong> {edit.created_at}
+                </Text>
+              </Box>
             ))}
-          </Accordion>
+          </Box>
         </Box>
       )}
     </Box>
