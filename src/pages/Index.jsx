@@ -36,7 +36,16 @@ const Index = () => {
   };
 
   const getProjectEdits = () => {
-    return csvData.filter((row) => row["__path__"].includes(selectedProject)).sort((a, b) => new Date(a["__created__"]) - new Date(b["__created__"]));
+    return csvData
+      .filter((row) => row["__path__"].includes(selectedProject))
+      .sort((a, b) => new Date(a["__created__"]) - new Date(b["__created__"]))
+      .map((edit) => {
+        const tags = JSON.parse(edit.tags);
+        return {
+          ...edit,
+          code_blocks: tags.output || edit.code_blocks,
+        };
+      });
   };
 
   return (
