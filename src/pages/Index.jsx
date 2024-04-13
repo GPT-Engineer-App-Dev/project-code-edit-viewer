@@ -31,13 +31,13 @@ const Index = () => {
   };
 
   const getUniqueProjects = () => {
-    const projects = csvData.map((row) => row["__path__"].split("/")[1]);
+    const projects = csvData.filter((row) => row.type === "ai_update").map((row) => row["__path__"].split("/")[1]);
     return [...new Set(projects)];
   };
 
   const getProjectEdits = () => {
     return csvData
-      .filter((row) => row["__path__"].includes(selectedProject))
+      .filter((row) => row["__path__"].includes(selectedProject) && row.type === "ai_update")
       .sort((a, b) => new Date(a["__created__"]) - new Date(b["__created__"]))
       .map((edit) => {
         let tags = edit.tags;
