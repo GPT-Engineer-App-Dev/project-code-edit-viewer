@@ -40,11 +40,22 @@ const Index = () => {
       .filter((row) => row["__path__"].includes(selectedProject))
       .sort((a, b) => new Date(a["__created__"]) - new Date(b["__created__"]))
       .map((edit) => {
-        const tags = JSON.parse(edit.tags);
-        return {
-          ...edit,
-          code_blocks: tags.output || edit.code_blocks,
-        };
+        let tags = edit.tags;
+
+        if (tags.startsWith('"') && tags.endsWith('"')) {
+          tags = tags.slice(1, -1);
+        }
+
+        try {
+          tags = JSON.parse(tags);
+          return {
+            ...edit,
+            code_blocks: tags.output || edit.code_blocks,
+          };
+        } catch (err) {
+          console.error(`Failed to parse tags for row with ID ${edit.id}:`, err);
+          return edit;
+        }
       });
   };
 
