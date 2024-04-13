@@ -10,8 +10,8 @@ const Index = () => {
     const reader = new FileReader();
 
     reader.onload = (e) => {
-      const csvData = e.target.result;
-      const lines = csvData.split("\n");
+      const csvString = e.target.result;
+      const lines = csvString.split("\n");
       const headers = lines[0].split(",");
       const data = lines.slice(1).map((line) => {
         const values = line.split(",");
@@ -22,8 +22,6 @@ const Index = () => {
       });
       setCsvData(data);
       console.log("Parsed CSV data:", data);
-      const uniqueProjects = getUniqueProjects();
-      console.log("Unique projects:", uniqueProjects);
     };
 
     reader.readAsText(file);
